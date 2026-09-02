@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#064b2b">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>São Silvério 2026 — Patrocinadores</title>
+<style>
+:root{--green:#064b2b;--gold:#f2ad00;--wine:#7d1717;--panel:#111;--line:#292929}
+*{box-sizing:border-box}
+html,body{margin:0;background:#101010;color:#fff;font-family:Arial,Helvetica,sans-serif}
+body{min-height:100vh}
+header{max-width:1240px;margin:auto;padding:24px 20px 12px;text-align:center}
+header .brand{font-weight:900;letter-spacing:2px;font-size:clamp(22px,3vw,34px)}
+header .brand b{color:var(--gold)}
+header p{margin:7px 0 0;color:#aaa;font-size:13px}
+.app{width:min(1240px,100%);margin:auto;padding:12px 20px 35px;display:grid;grid-template-columns:minmax(620px,1fr) 420px;gap:28px;align-items:start}
+.preview-card{background:#0b0b0b;border:1px solid #292929;border-radius:18px;padding:18px;box-shadow:0 12px 40px #000}
+.preview{width:min(100%,650px);margin:auto;position:relative}
+canvas{display:block;width:100%;height:auto;background:#fff;border-radius:7px;touch-action:none;box-shadow:0 5px 25px #000}
+.panel{background:var(--panel);border:1px solid #292929;border-radius:18px;padding:22px;position:sticky;top:14px;box-shadow:0 12px 40px #000}
+h1{font-size:25px;margin:0 0 6px}
+.intro{color:#aaa;font-size:13px;line-height:1.45;margin:0 0 16px}
+.section{border-top:1px solid var(--line);padding-top:15px;margin-top:15px}
+.section:first-of-type{border-top:0;padding-top:0;margin-top:0}
+.title{font-weight:900;font-size:14px;margin-bottom:8px}
+.btn{display:block;width:100%;border:0;border-radius:10px;min-height:46px;padding:11px 10px;font-size:14px;font-weight:900;cursor:pointer;white-space:nowrap;text-align:center}
+.btn+.btn{margin-top:8px}
+.gold{background:var(--gold);color:#111}
+.white{background:#fff;color:#111}
+.dark{background:#242424;color:#fff;border:1px solid #3b3b3b}
+input[type=file]{display:none}
+input[type=range]{width:100%;accent-color:var(--gold)}
+.name-input{width:100%;height:46px;border:1px solid #444;border-radius:10px;background:#080808;color:#fff;padding:0 13px;font-size:15px;font-weight:700;outline:none}
+.name-input:focus{border-color:var(--gold);box-shadow:0 0 0 2px rgba(242,173,0,.12)}
+.name-input::placeholder{color:#777}
+.grid3{display:grid;grid-template-columns:1fr 1.4fr 1fr;gap:8px;margin-top:8px}
+.grid3 .btn{min-height:42px;padding:8px 4px}
+.download{min-height:50px}
+.note{font-size:11px;line-height:1.45;color:#8e8e8e;margin-top:8px}
+.status{min-height:18px;color:var(--gold);font-weight:800;font-size:12px;margin-top:8px}
+.privacy{background:#191919;border-radius:10px;padding:12px;color:#aaa;font-size:12px;line-height:1.5;margin-top:16px}
+footer{text-align:center;color:#555;font-size:11px;padding:0 20px 25px}
+@media(max-width:1080px){.app{grid-template-columns:1fr;padding:8px 12px 25px}.panel{position:static}.preview-card{padding:10px}.preview{width:min(100%,650px)}header{padding-top:18px}}
+@media(max-width:520px){header{padding:14px 12px 8px}header p{font-size:11px}.app{padding:5px 8px 20px;gap:12px}.preview-card{padding:6px;border-radius:12px}.panel{padding:15px;border-radius:14px}.btn{font-size:13px}h1{font-size:22px}}
+</style>
+</head>
+<body>
+<header>
+ <div class="brand">SÃO SILVÉRIO <b>2026</b></div>
+ <p>PATROCINADORES • 59ª EDIÇÃO • BRAGANÇA PAULISTA</p>
+</header>
+
+<main class="app">
+ <section class="preview-card">
+  <div class="preview"><canvas id="canvas" width="1024" height="1024"></canvas></div>
+ </section>
+
+ <aside class="panel">
+  <h1>Template do patrocinador</h1>
+  <p class="intro">Coloque a logo da empresa no espaço central e gere a arte oficial da parceria com a São Silvério 2026.</p>
+
+  <div class="section">
+   <div class="title">Nome da empresa</div>
+   <input id="companyName" class="name-input" type="text" maxlength="60" placeholder="Digite o nome da empresa" autocomplete="organization">
+   <div class="note">O nome pode ser usado como identificação abaixo da logo.</div>
+  </div>
+
+  <div class="section">
+   <label class="btn gold" for="gallery">🖼️ ESCOLHER LOGO / IMAGEM</label>
+   <input id="gallery" type="file" accept="image/*">
+   <label class="btn dark" for="camera">📷 TIRAR UMA FOTO</label>
+   <input id="camera" type="file" accept="image/*" capture="environment">
+  </div>
+
+  <div class="section">
+   <div class="title">Tamanho da logo</div>
+   <input id="zoom" type="range" min=".35" max="3.5" step=".01" value="1">
+   <div class="grid3">
+    <button class="btn dark" id="minus">−</button>
+    <button class="btn dark" id="center">CENTRALIZAR</button>
+    <button class="btn dark" id="plus">+</button>
+   </div>
+  </div>
+
+  <div class="section">
+   <div class="title">Posição</div>
+   <div class="grid3">
+    <button class="btn dark" id="up">↑</button>
+    <button class="btn dark" id="reset">RESET</button>
+    <button class="btn dark" id="down">↓</button>
+   </div>
+   <div class="grid3">
+    <button class="btn dark" id="left">←</button>
+    <button class="btn dark" id="right">→</button>
+    <button class="btn dark" id="fit">AJUSTAR</button>
+   </div>
+   <div class="note">Arraste a logo diretamente sobre a área central ou use os controles.</div>
+  </div>
+
+  <div class="section">
+   <div class="title">Baixar</div>
+   <button class="btn white download" id="downloadStory">⬇️ STORIES / REELS — 1080 × 1080</button>
+   <button class="btn gold download" id="downloadOriginal">⬇️ POST OFICIAL — 1024 × 1024</button>
+   <div id="status" class="status"></div>
+  </div>
+
+  <div class="privacy"><b>Privacidade:</b> a imagem da empresa não é enviada para servidor. A montagem é feita no próprio aparelho.</div>
+ </aside>
+</main>
+<footer>SÃO SILVÉRIO 2026 • PATROCINADORES</footer>
+
+<script>
+const overlay=new Image();
+overlay.src="./template-overlay.png";
+const canvas=document.getElementById("canvas");
+const ctx=canvas.getContext("2d",{alpha:false});
+const zoom=document.getElementById("zoom");
+const status=document.getElementById("status");
+const companyName=document.getElementById("companyName");
+
+/* Central sponsor/logo window of the supplied São Silvério template */
+const PHOTO={x:270,y:294,w:485,h:443};
+let photo=null;
+let state={x:PHOTO.x+PHOTO.w/2,y:PHOTO.y+PHOTO.h/2,zoom:1};
+let dragging=false,last={x:0,y:0};
+
+function statusMsg(t){status.textContent=t||""}
+function center(){if(!photo)return;state.x=PHOTO.x+PHOTO.w/2;state.y=PHOTO.y+PHOTO.h/2;state.zoom=1;zoom.value=1}
+function baseScale(){return photo?Math.min(PHOTO.w/photo.width,PHOTO.h/photo.height):1}
+function currentScale(){return baseScale()*state.zoom}
+
+function drawName(c){
+ const name=(companyName.value||"").trim();
+ if(!name)return;
+ let size=28, maxW=PHOTO.w-30;
+ c.save();c.textAlign="center";c.textBaseline="alphabetic";c.font=`900 ${size}px Arial`;
+ while(c.measureText(name).width>maxW && size>14){size--;c.font=`900 ${size}px Arial`;}
+ c.lineWidth=4;c.strokeStyle="rgba(0,0,0,.75)";
+ c.strokeText(name,PHOTO.x+PHOTO.w/2,PHOTO.y+PHOTO.h-18);
+ c.fillStyle="#fff";c.fillText(name,PHOTO.x+PHOTO.w/2,PHOTO.y+PHOTO.h-18);c.restore();
+}
+
+function draw(){
+ ctx.fillStyle="#fff";ctx.fillRect(0,0,canvas.width,canvas.height);
+ if(photo){
+  ctx.save();ctx.beginPath();ctx.rect(PHOTO.x,PHOTO.y,PHOTO.w,PHOTO.h);ctx.clip();
+  const s=currentScale(),w=photo.width*s,h=photo.height*s;
+  ctx.drawImage(photo,state.x-w/2,state.y-h/2,w,h);
+  ctx.restore();
+  drawName(ctx);
+ }
+ if(overlay.complete)ctx.drawImage(overlay,0,0,1024,1024);
+}
+overlay.onload=draw;draw();
+
+function load(file){
+ if(!file)return;
+ const r=new FileReader();
+ r.onload=e=>{
+  const im=new Image();
+  im.onload=()=>{photo=im;center();statusMsg("Logo pronta. Arraste para posicionar.");draw()};
+  im.src=e.target.result;
+ };
+ r.readAsDataURL(file);
+}
+gallery.onchange=e=>load(e.target.files[0]);
+camera.onchange=e=>load(e.target.files[0]);
+companyName.addEventListener("input",draw);
+
+function point(e){
+ const r=canvas.getBoundingClientRect();
+ return {x:(e.clientX-r.left)*canvas.width/r.width,y:(e.clientY-r.top)*canvas.height/r.height};
+}
+canvas.addEventListener("pointerdown",e=>{if(!photo)return;dragging=true;canvas.setPointerCapture(e.pointerId);last=point(e)});
+canvas.addEventListener("pointermove",e=>{if(!dragging||!photo)return;const p=point(e);state.x+=p.x-last.x;state.y+=p.y-last.y;last=p;draw()});
+canvas.addEventListener("pointerup",()=>dragging=false);
+canvas.addEventListener("pointercancel",()=>dragging=false);
+
+function move(dx,dy){if(!photo)return;state.x+=dx;state.y+=dy;draw()}
+zoom.oninput=()=>{state.zoom=+zoom.value;draw()};
+document.getElementById("center").onclick=()=>{center();draw()};
+document.getElementById("reset").onclick=()=>{center();draw()};
+document.getElementById("fit").onclick=()=>{center();draw()};
+document.getElementById("up").onclick=()=>move(0,-15);
+document.getElementById("down").onclick=()=>move(0,15);
+document.getElementById("left").onclick=()=>move(-15,0);
+document.getElementById("right").onclick=()=>move(15,0);
+document.getElementById("plus").onclick=()=>{zoom.value=Math.min(3.5,+zoom.value+.1);state.zoom=+zoom.value;draw()};
+document.getElementById("minus").onclick=()=>{zoom.value=Math.max(.35,+zoom.value-.1);state.zoom=+zoom.value;draw()};
+
+function render(){
+ const out=document.createElement("canvas");out.width=1024;out.height=1024;
+ const c=out.getContext("2d",{alpha:false});c.fillStyle="#fff";c.fillRect(0,0,1024,1024);
+ if(photo){
+  c.save();c.beginPath();c.rect(PHOTO.x,PHOTO.y,PHOTO.w,PHOTO.h);c.clip();
+  const s=currentScale(),w=photo.width*s,h=photo.height*s;
+  c.drawImage(photo,state.x-w/2,state.y-h/2,w,h);c.restore();
+  drawName(c);
+ }
+ c.drawImage(overlay,0,0,1024,1024);
+ return out;
+}
+function download(){
+ if(!photo){statusMsg("Escolha uma logo ou imagem antes de baixar.");return}
+ render().toBlob(blob=>{
+  const u=URL.createObjectURL(blob),a=document.createElement("a");
+  a.href=u;a.download="sao-silverio-2026-patrocinador.png";
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(u),1000);
+  statusMsg("Arte pronta.");
+ },"image/png");
+}
+downloadStory.onclick=download;
+downloadOriginal.onclick=download;
+document.addEventListener("keydown",e=>{
+ if(!photo)return;const n=e.shiftKey?30:10;
+ if(e.key==="ArrowUp")move(0,-n);
+ if(e.key==="ArrowDown")move(0,n);
+ if(e.key==="ArrowLeft")move(-n,0);
+ if(e.key==="ArrowRight")move(n,0);
+});
+</script>
+</body>
+</html>
