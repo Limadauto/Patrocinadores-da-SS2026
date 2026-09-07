@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Patrocinadores — 59ª Corrida de São Silvério 2026</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#101010;color:#fff;font-family:Arial,Helvetica,sans-serif}
+header{max-width:1320px;margin:auto;padding:18px 22px 10px;text-align:center}header h1{margin:0;font-size:clamp(21px,3vw,34px);font-weight:900}header p{margin:7px 0 0;color:#bbb;font-size:14px}
+.app{max-width:1320px;margin:auto;padding:12px 22px 36px;display:grid;grid-template-columns:minmax(500px,1fr) 390px;gap:24px;align-items:start}
+.preview-wrap{background:#080808;border:1px solid #2b2b2b;border-radius:18px;padding:14px;display:flex;justify-content:center;min-width:0}.preview{position:relative;width:min(100%,760px);aspect-ratio:1268/1241;overflow:hidden;background:#fff}canvas{width:100%;height:100%;display:block;touch-action:none}
+.panel{background:#181818;border:1px solid #303030;border-radius:18px;padding:20px;position:sticky;top:14px}.panel h2{margin:0 0 7px;font-size:22px}.intro{margin:0 0 15px;color:#bbb;line-height:1.4;font-size:14px}.section{border-top:1px solid #303030;padding-top:15px;margin-top:15px}.title{font-weight:900;margin-bottom:8px}.btn{display:block;width:100%;min-height:46px;border:0;border-radius:10px;padding:11px 10px;font-size:14px;font-weight:900;cursor:pointer;text-align:center}.primary{background:#f2b300;color:#111}.secondary{background:#fff;color:#111}.dark{background:#292929;color:#fff}.filegrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}.name-input{width:100%;height:46px;border:1px solid #444;border-radius:10px;background:#080808;color:#fff;padding:0 13px;font-size:15px;font-weight:700;outline:none}.name-input:focus{border-color:#f2b300;box-shadow:0 0 0 2px rgba(242,179,0,.12)}input[type=range]{width:100%;accent-color:#f2b300}.controls{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:7px}.controls.two{grid-template-columns:1fr 1fr}.note{font-size:12px;color:#999;line-height:1.4;margin-top:8px}.format{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:9px}.format button{min-height:48px}button.active{outline:2px solid #f2b300}
+@media(max-width:950px){.app{grid-template-columns:1fr}.panel{position:static}.preview-wrap{padding:8px}}
+@media(max-width:560px){header{padding:14px 12px 7px}.app{padding:8px 10px 24px}.filegrid{grid-template-columns:1fr}.panel{padding:15px}.preview-wrap{border-radius:12px}}
+</style></head>
+<body>
+<header><h1>PATROCINADORES DA 59ª CORRIDA DE SÃO SILVÉRIO 2026</h1><p>Insira a marca do patrocinador no template oficial e baixe a arte pronta.</p></header>
+<main class="app">
+<section class="preview-wrap"><div class="preview"><canvas id="canvas" width="1268" height="1241"></canvas></div></section>
+<aside class="panel">
+<h2>Patrocinador</h2><p class="intro">Escolha o logo da empresa. A montagem é feita no próprio aparelho e a imagem não é enviada para nenhum servidor.</p>
+<div class="section" style="border-top:0;padding-top:0;margin-top:0"><label class="btn primary">📁 ESCOLHER LOGO<input id="logoFile" type="file" accept="image/*" hidden></label></div>
+<div class="section"><div class="title">Nome do patrocinador</div><input id="name" class="name-input" maxlength="50" placeholder="Digite o nome da empresa (opcional)"><div class="note">O nome será colocado abaixo do logo dentro da área reservada.</div></div>
+<div class="section"><div class="title">Tamanho do logo</div><input id="zoom" type="range" min="0.25" max="2.5" step="0.01" value="1"><div class="controls"><button class="btn dark" id="minus">−</button><button class="btn dark" id="center">CENTRALIZAR</button><button class="btn dark" id="plus">+</button></div></div>
+<div class="section"><div class="title">Posição do logo</div><div class="controls"><button class="btn dark" id="up">↑</button><button class="btn dark" id="reset">RESET</button><button class="btn dark" id="down">↓</button></div><div class="controls two" style="margin-top:7px"><button class="btn dark" id="left">←</button><button class="btn dark" id="right">→</button></div><div class="note">No celular, arraste o logo com o dedo. No computador, use o mouse.</div></div>
+<div class="section"><div class="title">Formato do download</div><div class="format"><button class="btn dark active" id="square">ARTE ORIGINAL<br><small>1268 × 1241</small></button><button class="btn dark" id="story">STORIES / REELS<br><small>1080 × 1920</small></button></div><button class="btn secondary" id="download">⬇️ BAIXAR ARTE</button><div class="note">A versão Stories/Reels preserva toda a arte e a centraliza no formato vertical.</div></div>
+</aside></main>
+<script>
+const W=1268,H=1241,BOX={x:330,y:365,w:575,h:485};
+const base=new Image(),overlay=new Image();base.src='template-base.png';overlay.src='template-overlay.png';
+const c=document.getElementById('canvas'),ctx=c.getContext('2d');const nameEl=document.getElementById('name'),zoomEl=document.getElementById('zoom');
+let logo=null,state={x:BOX.x+BOX.w/2,y:BOX.y+BOX.h/2,zoom:1};
+function fitSize(){if(!logo)return {w:0,h:0};const fit=Math.min(BOX.w/logo.naturalWidth,BOX.h/logo.naturalHeight)*state.zoom;return {w:logo.naturalWidth*fit,h:logo.naturalHeight*fit}}
+function drawName(g,scale=1){const s=nameEl.value.trim();if(!s)return;let fs=30*scale;g.save();g.font=`900 ${fs}px Arial,Helvetica,sans-serif`;const max=BOX.w*.82*scale;while(g.measureText(s).width>max&&fs>12*scale){fs-=1*scale;g.font=`900 ${fs}px Arial,Helvetica,sans-serif`}g.textAlign='center';g.textBaseline='top';g.fillStyle='#164f35';g.fillText(s,(BOX.x+BOX.w/2)*scale,(BOX.y+BOX.h-55)*scale);g.restore()}
+function render(g,scale=1){g.clearRect(0,0,g.canvas.width,g.canvas.height);g.drawImage(base,0,0,g.canvas.width,g.canvas.height);if(logo){const z=fitSize(),x=state.x-z.w/2,y=state.y-z.h/2;g.save();g.beginPath();g.rect(BOX.x*scale,BOX.y*scale,BOX.w*scale,BOX.h*scale);g.clip();g.drawImage(logo,x*scale,y*scale,z.w*scale,z.h*scale);g.restore();drawName(g,scale)}g.drawImage(overlay,0,0,g.canvas.width,g.canvas.height)}
+function draw(){render(ctx,1)}
+function load(f){if(!f)return;const r=new FileReader();r.onload=()=>{logo=new Image();logo.onload=()=>{state={x:BOX.x+BOX.w/2,y:BOX.y+BOX.h/2,zoom:1};zoomEl.value=1;draw()};logo.src=r.result};r.readAsDataURL(f)}
+logoFile.onchange=e=>load(e.target.files[0]);nameEl.oninput=draw;zoomEl.oninput=()=>{state.zoom=+zoomEl.value;draw()};
+function move(dx,dy){state.x+=dx;state.y+=dy;draw()}plus.onclick=()=>{zoomEl.value=Math.min(2.5,+zoomEl.value+.08);zoomEl.oninput()};minus.onclick=()=>{zoomEl.value=Math.max(.25,+zoomEl.value-.08);zoomEl.oninput()};center.onclick=()=>{state.x=BOX.x+BOX.w/2;state.y=BOX.y+BOX.h/2;draw()};reset.onclick=center.onclick;up.onclick=()=>move(0,-12);down.onclick=()=>move(0,12);left.onclick=()=>move(-12,0);right.onclick=()=>move(12,0);
+let dragging=false,last={x:0,y:0};c.addEventListener('pointerdown',e=>{if(!logo)return;dragging=true;last={x:e.clientX,y:e.clientY};c.setPointerCapture(e.pointerId)});c.addEventListener('pointermove',e=>{if(!dragging)return;const r=c.getBoundingClientRect();state.x+=(e.clientX-last.x)*W/r.width;state.y+=(e.clientY-last.y)*W/r.width;last={x:e.clientX,y:e.clientY};draw()});c.addEventListener('pointerup',()=>dragging=false);c.addEventListener('pointercancel',()=>dragging=false);
+let mode='square';square.onclick=()=>{mode='square';square.classList.add('active');story.classList.remove('active')};story.onclick=()=>{mode='story';story.classList.add('active');square.classList.remove('active')};
+function makeSquare(){const o=document.createElement('canvas');o.width=W;o.height=H;render(o.getContext('2d'),1);return o}
+function makeStory(){const o=document.createElement('canvas');o.width=1080;o.height=1920;const g=o.getContext('2d');g.fillStyle='#fff';g.fillRect(0,0,1080,1920);const s=1080/W;const hh=H*s;g.drawImage(makeSquare(),0,(1920-hh)/2,1080,hh);return o}
+download.onclick=()=>{if(!logo){alert('Escolha o logo do patrocinador primeiro.');return}const o=mode==='story'?makeStory():makeSquare();const a=document.createElement('a');a.download=mode==='story'?'patrocinadores-sao-silverio-2026-stories.jpg':'patrocinadores-sao-silverio-2026.jpg';a.href=o.toDataURL('image/jpeg',.96);a.click()};
+Promise.all([new Promise(r=>base.onload=r),new Promise(r=>overlay.onload=r)]).then(draw);
+</script></body></html>
